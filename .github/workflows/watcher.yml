@@ -1,0 +1,33 @@
+---
+  name: watcher
+
+  on:
+    workflow_dispatch:
+    push:
+      branches: [ main ]
+    schedule:
+      - cron:  '30 5,17 * * *'
+    repository_dispatch:
+      types:
+        - workflow_run_watcher
+
+  env:
+    GHWATCHER_ORG_TOKEN: ${{ github.event.client_payload.org_token || secrets.ORG_TOKEN }}
+    GHWATCHER_CHECK_ORG: ${{ github.event.client_payload.organization || 'mydevsandbox-com' }}
+    GHWATCHER_CHECK_REPO: ${{ github.event.client_payload.check_repo || null }}
+    GHWATCHER_ENFORCE_PRIVATE: ${{ github.event.client_payload.enforce_private || false }}
+    GHWATCHER_REPO_SKIP_LIST: ${{ github.event.client_payload.skip_list || 'watcher' }}
+
+  jobs:
+    watcher_exec:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - name: Use Node.js ${{ matrix.node-version }}
+          uses: actions/setup-node@v1
+          with:
+            node-version: 14.x
+        - name: npm setup
+          run: npm install
+        - name: exec
+          run: npx node github-action.js
