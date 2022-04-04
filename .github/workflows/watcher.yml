@@ -17,9 +17,10 @@
     GHWATCHER_ORG_TOKEN: ${{ github.event.client_payload.org_token || secrets.ORG_TOKEN }}
     GHWATCHER_CHECK_ORG: ${{ github.event.client_payload.organization || 'mydevsandbox-com' }}
     GHWATCHER_CHECK_REPO: ${{ github.event.client_payload.check_repo || null }}
-    GHWATCHER_ENFORCE_PRIVATE: ${{ github.event.client_payload.enforce_private || false }}
+    GHWATCHER_ENFORCE_PRIVATE: ${{ github.event.client_payload.enforce_private || null }}
     GHWATCHER_REPO_SKIP_LIST: ${{ github.event.client_payload.skip_list || 'watcher' }}
     GHWATCHER_ALLOWED_ORG_LIST: ${{ github.event.client_payload.allowed_org_list || 'mydevsandbox-com' }}
+    GHWATCHER_ENABLE_DEPENDABOT: ${{ github.event.client_payload.allowed_org_list || null }}
 
   jobs:
     watcher_exec:

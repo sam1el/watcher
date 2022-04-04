@@ -9,6 +9,8 @@
 //   Organization names which this application is allowed to target.  Limits interactions from this application to only scan
 //   specified target Organizations which are explicitly allowed. Supports a String value either space or comma delimited.
 // GHWATCHER_CHECK_BRANCH: String, optional, name of branch to check.  If empty, discovered default_branch will be checked.
+// GHWATCHER_ENABLE_DEPENDABOT: String, optional, Used to determine if Dependabot scanning should be enabled on repositories when
+//   applying branch protection rules, enabling by setting a String value of `true`. Default value is `null`.
 
 const watcher = require('./watcher');
 
@@ -30,9 +32,12 @@ if (
             await watcher.setBranchProtection(response.organization, repo.name, branch.name);
           };
 
-          if (repo.dependabot_vulnerability_alerts_enabled !== true) {
+          if (
+            (process.env.GHWATCHER_ENABLE_DEPENDABOT &&
+              process.env.GHWATCHER_ENABLE_DEPENDABOT.match(/true/)) &&
+            repo.dependabot_vulnerability_alerts_enabled !== true) {
             await watcher.enableVulnerabilityAlert(response.organization, repo.name);
-          }
+          };
         }
       };
     }).then(
