@@ -4,6 +4,7 @@
 
 const watcher = require('./watcher');
 const express = require('express');
+const _ = require('lodash');
 // const crypto = require('crypto');
 const app = express();
 const WEB_PORT = (process.env.GHWATCHER_PORT || process.env.PORT);
@@ -44,7 +45,7 @@ app.post('/github-watcher', async(req, res) => {
   // }
 
   if (req.body.action === 'created' &&
-  (ALLOWED_ORG_LIST).match(RegExp('(^|\\s*|,)' + req.body.repository.owner.login + '($|\\s*|,)'))) {
+  (ALLOWED_ORG_LIST).match(RegExp('(^|\\s*|,)' + _.escapeRegExp(req.body.repository.owner.login) + '($|\\s*|,)'))) {
     watcher.getProtectionStatus(
       req.body.repository.owner.login,
       req.body.repository.name,
