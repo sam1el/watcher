@@ -3,7 +3,20 @@
 //  Octokit and the GitHub REST API.
 
 const { Octokit } = require('@octokit/rest');
-const octokit = new Octokit({ auth: process.env.GHWATCHER_ORG_TOKEN });
+const { createAppAuth } = require('@octokit/auth-app');
+
+const octokit = new Octokit({
+  authStrategy: createAppAuth,
+  auth: {
+    appId: process.env.GHWATCHER_APP_ID,
+    privateKey: process.env.GHWATCHER_APP_PEM,
+    // Default to just specify the installationId and let a token get generated
+    installationId: process.env.GHWATCHER_APP_INSTALLATION_ID,
+    // Otherwise specify the client id/secret
+    // clientId: process.env.GHWATCHER_APP_CLIENT_ID,
+    // clientSecret: process.env.GHWATCHER_APP_CLIENT_SECRET,
+  },
+});
 
 // Fetch listing of repositories for an organization
 //  Returns an Array of Objects with details of repositories

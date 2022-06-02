@@ -31,7 +31,7 @@ This example repository uses **Node.js** to communicate with the GitHub REST API
 - **GitHub Organization**:  A GitHub Organization is required to use examples within this repository.  It is strongly encouraged to use a dedicated testing organization first so that changes are not accidentally introduced into primary organizations and associated repositories.
 - **Github Access**: Requires Organization Administrative rights for setting up an organization webhook.
 - **GitHub Organization Webhook**:  A Webhook will be used with the GitHub organization to communicate trigger events to the Web App included with this repository.
-- **GitHub Access Token**: Communications with the GitHub REST API require authenticated access for components used with this example.  Token credential should have rights for the `repo` and `read:org` scopes.  This example repo makes use of a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+- **GitHub App**: Communications with the GitHub REST API require authenticated access for components used with this example.  See [GitHub App Docs](https://docs.github.com/en/developers/apps/managing-github-apps) for setup.
 - **Hosting for Web App**: To use the `index.js` sample included with this repository a hosting location is needed that is accessible from GitHub.  [Heroku](https://www.heroku.com/) was used in this example.
 
 ## Usage
@@ -57,7 +57,11 @@ graph LR;
 - `watcher.js`: Contains functions and module exports which are called from `index.js` entry point.
 - Environment Variables used:
   - `GHWATCHER_PORT` (or `PORT`): **required**, Used by **Express** in `index.js` to determine what port should be used for bind when starting the application.
-  - `GHWATCHER_ORG_TOKEN`: **required**, Used by `watcher.js` to supply a token credential for interacting with the GitHub REST API with Octokit.
+  - `GHWATCHER_APP_ID`: **required**, Used by `watcher.js`, GitHub App ID for interacting with the GitHub REST API with Octokit.
+  - `GHWATCHER_APP_PEM`: **required**, Used by `watcher.js`, GitHub App Private Key content for interacting with the GitHub REST API with Octokit.
+  - Authenticate with either an app installation ID or a client id + client secret:
+    - `GHWATCHER_APP_INSTALLATION_ID`: Used by `watcher.js`, will be used to generate a short-lived token for interacting with the GitHub REST API with Octokit.
+    - `GHWATCHER_APP_CLIENT_ID` + `GHWATCHER_APP_CLIENT_SECRET`: Used by `watcher.js` to authenticate with the GitHub REST API with Octokit.
   - `GHWATCHER_ALLOWED_ORG_LIST`: **required**, Used by `index.js` to determine if the `repository.owner.login` sent in the webhook request is matched to a valid listing of Organization names which this application is allowed to target.  Limits interactions from this application to only scan specified target Organizations which are explicitly allowed. Supports a String value either space or comma delimited.
   - `GHWATCHER_ENABLE_DEPENDABOT`: Used by `index.js` to determine if Dependabot scanning should be enabled on repositories when applying branch protection rules, enabling by setting a String value of `true`. Default value is `null`.
   - `GHWATCHER_ENFORCE_PRIVATE`: Used by `watcher.js` to determine if checks/enforcement should happen for **private** repositories, setting to value of `true` to include **private** repositories.  Default value is `false`.
@@ -104,14 +108,15 @@ To run a local copy of the Web Application for validation, verify that the app [
 - Setup Environment variables and start the application:
   ```sh
   export GHWATCHER_PORT=3000
-  export GHWATCHER_ORG_TOKEN="my_github_api_token"
+  export GHWATCHER_APP_ID='my_github_app_id'
+  export GHWATCHER_APP_INSTALLATION_ID='my_github_app_installation_id'
+  export GHWATCHER_APP_PEM=$(cat /path/to/my/key.pem)
   export GHWATCHER_ALLOWED_ORG_LIST="my,list,of,org,names"
   npm start
   ```
   output should be similar to:
   ```plain
   [dev-user@87fe533daf66 watcher]$   export GHWATCHER_PORT=3000
-  [dev-user@87fe533daf66 watcher]$   export GHWATCHER_ORG_TOKEN="my_github_api_token"
   [dev-user@87fe533daf66 watcher]$   npm start
 
   > watcher@0.0.1 start
