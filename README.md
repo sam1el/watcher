@@ -73,10 +73,13 @@ graph LR;
 To run a local copy of the Web Application for validation, verify that the app [requirements](#requirements) are in place and then:
 
 - Clone the repository locally:
+
   ```sh
   git clone https://github.com/mydevsandbox-com/watcher && cd watcher
   ```
+
   output should be similar to:
+
   ```plain
   [dev-user@87fe533daf66 ~]$ git clone https://github.com/mydevsandbox-com/watcher && cd watcher
   Cloning into 'watcher'...
@@ -90,10 +93,13 @@ To run a local copy of the Web Application for validation, verify that the app [
   ```
 
 - Install **Node.js** package dependencies:
+
   ```sh
   npm install
   ```
+
   output should be similar to:
+
   ```plain
   [dev-user@87fe533daf66 watcher]$ npm install
 
@@ -105,7 +111,9 @@ To run a local copy of the Web Application for validation, verify that the app [
   found 0 vulnerabilities
   [dev-user@87fe533daf66 watcher]$
   ```
+
 - Setup Environment variables and start the application:
+
   ```sh
   export GHWATCHER_PORT=3000
   export GHWATCHER_APP_ID='my_github_app_id'
@@ -114,7 +122,9 @@ To run a local copy of the Web Application for validation, verify that the app [
   export GHWATCHER_ALLOWED_ORG_LIST="my,list,of,org,names"
   npm start
   ```
+
   output should be similar to:
+
   ```plain
   [dev-user@87fe533daf66 watcher]$   export GHWATCHER_PORT=3000
   [dev-user@87fe533daf66 watcher]$   npm start
@@ -140,7 +150,9 @@ curl \
   -H "content-type: application/json" \
   -d '{"action":"created", "repository":{"name": "reponame", "owner": {"login":"ownername"}}, "sender": {"login": "github-username"}}'
 ```
+
 output should be similar to:
+
 ```plain
 [dev-user@87fe533daf66 ~]$ curl \
 >   http://localhost:3000/github-watcher \
