@@ -3,10 +3,10 @@
 
   on:
     workflow_dispatch:
-    pull_request:
-      branches: [ main ]
-    push:
-      branches: [ main ]
+    # pull_request:
+    #   branches: [ main ]
+    # push:
+    #   branches: [ main ]
     # schedule:
     #   - cron:  '30 5,17 * * *'
     repository_dispatch:
@@ -14,7 +14,9 @@
         - workflow_run_watcher
 
   env:
-    GHWATCHER_ORG_TOKEN: ${{ github.event.client_payload.org_token || secrets.ORG_TOKEN }}
+    GHWATCHER_APP_ID: ${{ secrets.GHWATCHER_APP_ID }}
+    GHWATCHER_APP_PEM: ${{ secrets.GHWATCHER_APP_PEM }}
+    GHWATCHER_APP_INSTALLATION_ID: ${{ secrets.GHWATCHER_APP_INSTALLATION_ID }}
     GHWATCHER_CHECK_ORG: ${{ github.event.client_payload.organization || 'mydevsandbox-com' }}
     GHWATCHER_CHECK_REPO: ${{ github.event.client_payload.check_repo || null }}
     GHWATCHER_ENFORCE_PRIVATE: ${{ github.event.client_payload.enforce_private || null }}
